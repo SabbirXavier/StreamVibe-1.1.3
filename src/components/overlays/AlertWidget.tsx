@@ -7,8 +7,6 @@ interface AlertWidgetProps {
     config: any;
     donation: any;
     isEditMode: boolean;
-    selectedId?: string;
-    onSelect?: (id: string) => void;
     onUpdate: (id: string, data: any) => void;
     className?: string;
     style?: React.CSSProperties;
@@ -18,14 +16,12 @@ interface AlertWidgetProps {
     boxBg?: any;
 }
 
-export function AlertWidget({ config, donation, isEditMode, selectedId, onSelect, onUpdate, className, style, widthStr, heightStr, paddingStr, boxBg }: AlertWidgetProps) {
+export function AlertWidget({ config, donation, isEditMode, onUpdate, className, style, widthStr, heightStr, paddingStr, boxBg }: AlertWidgetProps) {
     return (
         <InteractableElement
             id="container"
             config={config}
             isEditMode={isEditMode}
-            selectedId={selectedId}
-            onSelect={onSelect}
             onUpdate={onUpdate}
             className={`relative backdrop-blur-3xl border border-white/10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] rounded-[2.5rem] text-center ${className}`}
             style={{ 
@@ -41,8 +37,6 @@ export function AlertWidget({ config, donation, isEditMode, selectedId, onSelect
                     id="icon"
                     config={config}
                     isEditMode={isEditMode}
-                    selectedId={selectedId}
-                    onSelect={onSelect}
                     onUpdate={onUpdate}
                     className="w-20 h-20 rounded-[2rem] mb-6 shadow-[0_0_40px_var(--primary-glow)] flex items-center justify-center"
                     style={{ 
@@ -57,8 +51,6 @@ export function AlertWidget({ config, donation, isEditMode, selectedId, onSelect
                     id="text_top"
                     config={config}
                     isEditMode={isEditMode}
-                    selectedId={selectedId}
-                    onSelect={onSelect}
                     onUpdate={onUpdate}
                     className="text-center"
                 >
@@ -75,8 +67,6 @@ export function AlertWidget({ config, donation, isEditMode, selectedId, onSelect
                     id="ticker"
                     config={config}
                     isEditMode={isEditMode}
-                    selectedId={selectedId}
-                    onSelect={onSelect}
                     onUpdate={onUpdate}
                     className="w-full overflow-hidden mt-4"
                 >
@@ -98,8 +88,6 @@ export function AlertWidget({ config, donation, isEditMode, selectedId, onSelect
                     id="message"
                     config={config}
                     isEditMode={isEditMode}
-                    selectedId={selectedId}
-                    onSelect={onSelect}
                     onUpdate={onUpdate}
                     className="w-full text-center"
                 >

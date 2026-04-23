@@ -1,22 +1,19 @@
 import React from 'react';
 import { Rnd } from 'react-rnd';
-import { Lock, Unlock, Eye, EyeOff, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
+import { Lock, Unlock, Eye, EyeOff, Trash2 } from 'lucide-react';
 
 export interface InteractableProps {
   id: string;
   children: React.ReactNode;
   config: any;
   isEditMode: boolean;
-  selectedId?: string;
-  onSelect?: (id: string) => void;
   onUpdate: (id: string, data: any) => void;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export function InteractableElement({ id, children, config, isEditMode, selectedId, onSelect, onUpdate, className, style }: InteractableProps) {
-  const pos = config.elementPositions?.[id] || { x: 50, y: 50, w: 200, h: 100, locked: false, hidden: false, zIndex: 10 };
-  const isSelected = selectedId === id;
+export function InteractableElement({ id, children, config, isEditMode, onUpdate, className, style }: InteractableProps) {
+  const pos = config.elementPositions?.[id] || { x: 50, y: 50, w: 200, h: 100, locked: false, hidden: false };
 
   if (pos.hidden && !isEditMode) return null;
 
@@ -29,16 +26,6 @@ export function InteractableElement({ id, children, config, isEditMode, selected
        w: data.width, 
        h: data.height 
     });
-  };
-
-  const changeZIndex = (e: React.MouseEvent, delta: number) => {
-    e.stopPropagation();
-    onUpdate(id, { ...pos, zIndex: (pos.zIndex || 10) + delta });
-  };
-
-  const handleContainerClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onSelect) onSelect(id);
   };
 
   const toggleLock = (e: React.MouseEvent) => {
@@ -77,20 +64,19 @@ export function InteractableElement({ id, children, config, isEditMode, selected
           height: parseInt(ref.style.height),
         });
       }}
-      disableDragging={!isEditMode || pos.locked || !isSelected}
-      enableResizing={isEditMode && !pos.locked && isSelected}
-      className={`group ${className} ${isEditMode ? 'cursor-pointer' : ''} ${pos.hidden && isEditMode ? 'opacity-50' : ''}`}
-      style={{ zIndex: (isEditMode ? 50 : 1) + (pos.zIndex || 10), ...style }}
-      onClick={handleContainerClick}
+      disableDragging={!isEditMode || pos.locked}
+      enableResizing={isEditMode && !pos.locked}
+      className={`group ${className} ${isEditMode ? 'cursor-move' : ''} ${pos.hidden && isEditMode ? 'opacity-50' : ''}`}
+      style={{ zIndex: isEditMode ? 50 : 1, ...style }}
     >
-      {/* Bounding Box & Handles - Always show visual indicator if edit mode */}
+      {/* Bounding Box & Handles */}
       {isEditMode && (
-        <div className={`absolute -inset-2 border-2 border-dashed transition-colors rounded-lg z-[60] pointer-events-none ${isSelected ? (pos.locked ? 'border-red-500' : 'border-cyan-500') : 'border-white/20'}`} />
+        <div className={`absolute -inset-2 border-2 border-dashed transition-colors rounded-lg z-[60] pointer-events-none ${pos.locked ? 'border-red-500/50' : 'border-cyan-500/50 group-hover:border-cyan-500'}`} />
       )}
       
-      {/* Controls Overlay - Only show if selected */}
-      {isEditMode && isSelected && (
-        <div className="absolute -top-10 left-0 flex items-center gap-1 opacity-100 transition-opacity bg-black/80 backdrop-blur-md rounded-lg p-1 border border-white/10 z-[70] pointer-events-auto">
+      {/* Controls Overlay */}
+      {isEditMode && (
+        <div className="absolute -top-10 left-0 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity bg-black/80 backdrop-blur-md rounded-lg p-1 border border-white/10 z-[70] pointer-events-auto">
           <button onClick={toggleLock} className="p-1.5 hover:bg-white/10 rounded text-white transition-colors">
             {pos.locked ? <Lock size={12} className="text-red-500" /> : <Unlock size={12} className="text-cyan-500" />}
           </button>
@@ -101,14 +87,6 @@ export function InteractableElement({ id, children, config, isEditMode, selected
 
           <button onClick={deleteElement} className="p-1.5 hover:bg-red-900/50 rounded text-white transition-colors">
             <Trash2 size={12} className="text-red-500" />
-          </button>
-
-          <div className="w-px h-3 bg-white/10 mx-1" />
-          <button onClick={(e) => changeZIndex(e, 1)} className="p-1.5 hover:bg-white/10 rounded text-white transition-colors">
-            <ArrowUp size={12} className="text-cyan-500" />
-          </button>
-          <button onClick={(e) => changeZIndex(e, -1)} className="p-1.5 hover:bg-white/10 rounded text-white transition-colors">
-            <ArrowDown size={12} className="text-cyan-500" />
           </button>
 
           <div className="w-px h-3 bg-white/10 mx-1" />

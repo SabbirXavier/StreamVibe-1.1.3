@@ -113,7 +113,6 @@ interface Props {
 
 export default function WidgetCustomizer({ widget, onUpdate, onDelete, allowedTTSVoices = [], allPlatformVoices = [] }: Props) {
   const [config, setConfig] = useState(widget.config);
-  const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [previewingVoice, setPreviewingVoice] = useState(false);
   const [testAlert, setTestAlert] = useState(false);
@@ -152,9 +151,7 @@ export default function WidgetCustomizer({ widget, onUpdate, onDelete, allowedTT
   };
 
   const handleReset = () => {
-    // Force a deep reset and auto-arrange with defaults
-    const defaultConfig = widget.defaultConfig || {};
-    setConfig(defaultConfig);                
+    setConfig(widget.defaultConfig || {});
     toast.success("Widget reset to defaults.");
   };
 
@@ -441,8 +438,6 @@ export default function WidgetCustomizer({ widget, onUpdate, onDelete, allowedTT
                   id="container"
                   config={config}
                   isEditMode={true}
-                  selectedId={selectedElementId || undefined}
-                  onSelect={setSelectedElementId}
                   onUpdate={(id, data) => setConfig({ ...config, elementPositions: { ...(config.elementPositions || {}), [id]: data } })}
                   className="w-full"
                 >
@@ -500,8 +495,6 @@ export default function WidgetCustomizer({ widget, onUpdate, onDelete, allowedTT
                   id="container"
                   config={config}
                   isEditMode={true}
-                  selectedId={selectedElementId || undefined}
-                  onSelect={setSelectedElementId}
                   onUpdate={(id, data) => setConfig({ ...config, elementPositions: { ...(config.elementPositions || {}), [id]: data } })}
                   className="w-full"
                 >
@@ -536,8 +529,6 @@ export default function WidgetCustomizer({ widget, onUpdate, onDelete, allowedTT
                   id="container"
                   config={config}
                   isEditMode={true}
-                  selectedId={selectedElementId || undefined}
-                  onSelect={setSelectedElementId}
                   onUpdate={(id, data) => setConfig({ ...config, elementPositions: { ...(config.elementPositions || {}), [id]: data } })}
                   className="w-full"
                 >

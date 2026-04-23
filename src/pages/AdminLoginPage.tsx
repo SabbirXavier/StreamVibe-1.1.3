@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
       localStorage.setItem('nativeToken', token);
       window.location.href = '/admindashboard';
     } catch (error: any) {
-      toast.error("Invalid email or password");
+      toast.error(error.response?.data?.error || "Login failed check credentials");
     } finally {
       setLoading(false);
     }
